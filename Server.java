@@ -2,7 +2,6 @@ import java.io.*;
 import java.net.*;
 import java.io.IOException;
 import java.net.Socket;
-import java.util.concurrent.TimeUnit;
 import java.util.Random;
 import java.util.concurrent.ForkJoinPool;
 import java.util.concurrent.RecursiveTask;
@@ -11,6 +10,7 @@ import java.util.concurrent.RecursiveTask;
 public class Server {
     public static void main(String[] args) throws IOException, ClassNotFoundException
     {
+
         ServerSocket server = new ServerSocket(5555);
         System.out.println("listening on port 5555");
         Socket socket = server.accept();
@@ -20,29 +20,24 @@ public class Server {
         // get the outputstream of client
         ObjectInputStream objectInput = new ObjectInputStream(inputStream);
 
+        ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
+
         //read messages from socket
         int list[] = (int[]) objectInput.readObject();
         System.out.println("\nReceived [" + list.length + "] items");
 
-        System.out.println("\nBefore: ");
-
-        for(int i = 0; i < list.length; i++){
-            System.out.print(list[i] + " ");
-        }
-
-        ForkJoinPool pool = ForkJoinPool.commonPool();
-
         int n = list.length;
 
+        System.out.println("\nBegin Quicksort...");
+        ForkJoinPool pool = ForkJoinPool.commonPool();
         pool.invoke(new QuickSort(0, n - 1, list));
 
-        System.out.println("\nAfter: ");
-        
-        for(int i = 0; i < list.length; i++){
-            System.out.print(list[i] + " ");
-        }
+        out.writeObject(list);
 
         System.out.println("\n\nClosing socket...");
+
+        
+
         server.close();
         socket.close();
 
@@ -70,9 +65,7 @@ class QuickSort extends RecursiveTask<Integer> {
         int i = start, j = end;
  
         // Decide random pivot
-        int pivoted = new Random()
-                         .nextInt(j - i)
-                     + i;
+        int pivoted = new Random().nextInt(j - i) + i;
  
         // Swap the pivoted with end
         // element of array;
@@ -129,15 +122,9 @@ class QuickSort extends RecursiveTask<Integer> {
         int p = partition(start, end, arr);
  
         // Divide array
-        QuickSort left
-            = new QuickSort(start,
-                                          p - 1,
-                                          arr);
+        QuickSort left = new QuickSort(start, p - 1, arr);
  
-        QuickSort right
-            = new QuickSort(p + 1,
-                                          end,
-                                          arr);
+        QuickSort right = new QuickSort(p + 1, end, arr);
  
         // Left subproblem as separate thread
         left.fork();
