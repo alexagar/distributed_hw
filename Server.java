@@ -42,6 +42,11 @@ public class Server {
             System.out.print(list[i] + " ");
         }
 
+        // get the outputstream of client
+        ObjectOutputStream objectOutput = new ObjectOutputStream(socket.getOutputStream());
+
+        
+
         System.out.println("\n\nClosing socket...");
         server.close();
         socket.close();
@@ -66,13 +71,10 @@ class QuickSort extends RecursiveTask<Integer> {
      */
     private int partition(int start, int end,int[] arr)
     {
- 
         int i = start, j = end;
  
         // Decide random pivot
-        int pivoted = new Random()
-                         .nextInt(j - i)
-                     + i;
+        int pivoted = new Random().nextInt(j - i) + i;
  
         // Swap the pivoted with end
         // element of array;
@@ -129,15 +131,9 @@ class QuickSort extends RecursiveTask<Integer> {
         int p = partition(start, end, arr);
  
         // Divide array
-        QuickSort left
-            = new QuickSort(start,
-                                          p - 1,
-                                          arr);
+        QuickSort left = new QuickSort(start, p - 1, arr);
  
-        QuickSort right
-            = new QuickSort(p + 1,
-                                          end,
-                                          arr);
+        QuickSort right = new QuickSort(p + 1, end, arr);
  
         // Left subproblem as separate thread
         left.fork();
