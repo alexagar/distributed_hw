@@ -21,11 +21,23 @@ public class Server {
         ObjectInputStream objectInput = new ObjectInputStream(inputStream);
 
         //read messages from socket
-        Integer list[] = (Integer[]) objectInput.readObject();
+        int list[] = (int[]) objectInput.readObject();
         System.out.println("\nReceived [" + list.length + "] items");
 
         System.out.println("\nBefore: ");
 
+        for(int i = 0; i < list.length; i++){
+            System.out.print(list[i] + " ");
+        }
+
+        ForkJoinPool pool = ForkJoinPool.commonPool();
+
+        int n = list.length;
+
+        pool.invoke(new QuickSort(0, n - 1, list));
+
+        System.out.println("\nAfter: ");
+        
         for(int i = 0; i < list.length; i++){
             System.out.print(list[i] + " ");
         }
@@ -37,7 +49,7 @@ public class Server {
     }
 }
 
-class QuickSortMutliThreading extends RecursiveTask<Integer> {
+class QuickSort extends RecursiveTask<Integer> {
  
     int start, end;
     int[] arr;
@@ -52,8 +64,7 @@ class QuickSortMutliThreading extends RecursiveTask<Integer> {
      * @param arr
      * @return
      */
-    private int partition(int start, int end,
-                        int[] arr)
+    private int partition(int start, int end,int[] arr)
     {
  
         int i = start, j = end;
@@ -100,9 +111,7 @@ class QuickSortMutliThreading extends RecursiveTask<Integer> {
  
     // Function to implement
     // QuickSort method
-    public QuickSortMutliThreading(int start,
-                                   int end,
-                                   int[] arr)
+    public QuickSort(int start, int end, int[] arr)
     {
         this.arr = arr;
         this.start = start;
@@ -120,13 +129,13 @@ class QuickSortMutliThreading extends RecursiveTask<Integer> {
         int p = partition(start, end, arr);
  
         // Divide array
-        QuickSortMutliThreading left
-            = new QuickSortMutliThreading(start,
+        QuickSort left
+            = new QuickSort(start,
                                           p - 1,
                                           arr);
  
-        QuickSortMutliThreading right
-            = new QuickSortMutliThreading(p + 1,
+        QuickSort right
+            = new QuickSort(p + 1,
                                           end,
                                           arr);
  
