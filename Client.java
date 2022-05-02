@@ -18,7 +18,7 @@ public class Client {
   
           	// Variables for message passing	
     			
-				Integer list[] = new Integer[10];
+				int list[] = new int[10];
 				for (int i = 0; i < list.length; i++) {
 					list[i] = (int)(Math.random() * 100);
 				}
