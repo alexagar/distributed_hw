@@ -11,6 +11,7 @@ public class Server {
     public static void main(String[] args) throws IOException, ClassNotFoundException
     {
 
+
         ServerSocket server = new ServerSocket(5555);
         System.out.println("listening on port 5555");
         Socket socket = server.accept();
@@ -34,14 +35,9 @@ public class Server {
 
         out.writeObject(list);
 
-        // get the outputstream of client
-        ObjectOutputStream objectOutput = new ObjectOutputStream(socket.getOutputStream());
-
-        
-
         System.out.println("\n\nClosing socket...");
 
-        
+
 
         server.close();
         socket.close();
@@ -66,6 +62,7 @@ class QuickSort extends RecursiveTask<Integer> {
      */
     private int partition(int start, int end,int[] arr)
     {
+ 
         int i = start, j = end;
  
         // Decide random pivot
