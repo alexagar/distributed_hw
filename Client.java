@@ -16,7 +16,7 @@ public class Client {
 		int list2[] = new int[arraySize];
 
 		for (int i = 0; i < list.length; i++) {
-			list[i] = (int)(Math.random() * 100);
+			list[i] = (int)(Math.random() * 10000);
 			list2[i] = list[i];
 		}
 
